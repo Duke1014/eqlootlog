@@ -34,6 +34,7 @@ class Item(db.Model):
     item_slots = db.relationship('ItemSlot', secondary=item_slot_association, backref=db.backref('items', lazy='dynamic'))
     classes = db.relationship('Class', secondary=item_class_association, backref=db.backref('items', lazy='dynamic'))
     races = db.relationship('Race', secondary=item_race_association, backref=db.backref('items', lazy='dynamic'))
+    item_lore = db.Column(db.String())
 
     def to_json(self):
         mobs = [{'id': mob.id, 'mob_name': mob.mob_name} for mob in self.dropped_by]
@@ -41,6 +42,7 @@ class Item(db.Model):
         item_slots = [{'id': slot.id, 'slot_name': slot.slot_name} for slot in self.item_slots]
         classes = [{'id': class_.id, 'class_name': class_.class_name} for class_ in self.classes]
         races = [{'id': race.id, 'race_name': race.race_name} for race in self.races]
+
         return {
             "id": self.id,
             "item_name": self.item_name,
@@ -49,7 +51,8 @@ class Item(db.Model):
             "zones": zones,
             "item_slots": item_slots,
             "classes": classes,
-            "races": races
+            "races": races,
+            "item_lore": self.item_lore
         }
 
 class Mob(db.model):
