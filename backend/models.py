@@ -61,30 +61,30 @@ class Item(db.Model):
             "stats": self.stats
         }
 
-class Mob(db.model):
+class Mob(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mob_name = db.Column(db.String(), nullable=False)
     zones = db.relationship('Zone', secondary=mob_zone_association, backref=db.backref('mobs', lazy='dynamic'))
 
-class Zone(db.model):
+class Zone(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     zone_name = db.Column(db.String(), nullable=False)
 
-class Class(db.model):
+class Class(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     class_name = db.Column(db.String(), nullable=False)
     class_short_name = db.Column(db.String(), nullable=False)
 
-class Race(db.model):
+class Race(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     race_name = db.Column(db.String(), nullable=False)
     race_short_name = db.Column(db.String(), nullable=False)
 
-class ItemSlot(db.model):
+class ItemSlot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     slot_name = db.Column(db.String(), nullable=False)
 
-class Stat(db.model):
+class Stat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     stat_name = db.Column(db.String(), nullable=False)
     value = db.Column(db.Integer(), nullable=False, default=0)
