@@ -1,4 +1,5 @@
 from config import db
+from sqlalchemy import ForeignKey
 
 mob_zone_association = db.Table('mob_zone_association',
     db.Column('mob_id', db.Integer, db.ForeignKey('mob.id')),
@@ -35,6 +36,9 @@ class Item(db.Model):
     classes = db.relationship('Class', secondary=item_class_association, backref=db.backref('items', lazy='dynamic'))
     races = db.relationship('Race', secondary=item_race_association, backref=db.backref('items', lazy='dynamic'))
     item_lore = db.Column(db.String())
+    price = db.Column(db.Float())
+    stats = db.relationship('Stat', back_populates='item')
+    # needs stats
 
     def to_json(self):
         mobs = [{'id': mob.id, 'mob_name': mob.mob_name} for mob in self.dropped_by]
@@ -52,7 +56,9 @@ class Item(db.Model):
             "item_slots": item_slots,
             "classes": classes,
             "races": races,
-            "item_lore": self.item_lore
+            "item_lore": self.item_lore,
+            "price": self.price,
+            "stats": self.stats
         }
 
 class Mob(db.model):
@@ -77,3 +83,10 @@ class Race(db.model):
 class ItemSlot(db.model):
     id = db.Column(db.Integer, primary_key=True)
     slot_name = db.Column(db.String(), nullable=False)
+
+class Stat(db.model):
+    id = db.Column(db.Integer, primary_key=True)
+    stat_name = db.Column(db.String(), nullable=False)
+    value = db.Column(db.Integer(), nullable=False, default=0)
+    item_id = db.Column(db.Integer(), ForeignKey('item.id'))
+    item = db.relationship('Item', back_populates='stats')
